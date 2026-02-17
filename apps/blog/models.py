@@ -92,6 +92,13 @@ class ThemeSettings(models.Model):
     site_keywords = models.CharField(max_length=255, default="django, blog, python, web development", help_text="Comma-separated keywords.")
     twitter_handle = models.CharField(max_length=100, blank=True, help_text="@yourhandle")
     facebook_app_id = models.CharField(max_length=100, blank=True, help_text="Facebook App ID for Open Graph.")
+    
+    # Social Media Links - System Wide
+    facebook_url = models.URLField(blank=True, help_text="Facebook page URL")
+    twitter_url = models.URLField(blank=True, help_text="Twitter profile URL")
+    instagram_url = models.URLField(blank=True, help_text="Instagram profile URL")
+    linkedin_url = models.URLField(blank=True, help_text="LinkedIn profile URL")
+    github_url = models.URLField(blank=True, help_text="GitHub profile URL")
 
     def __str__(self):
         return "Theme Settings"

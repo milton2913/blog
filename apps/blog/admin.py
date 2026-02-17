@@ -60,6 +60,10 @@ class ThemeSettingsAdmin(admin.ModelAdmin):
             'fields': ('site_description', 'site_keywords', 'twitter_handle', 'facebook_app_id'),
             'classes': ('collapse',)
         }),
+        ('Social Media Links', {
+            'fields': ('facebook_url', 'twitter_url', 'instagram_url', 'linkedin_url', 'github_url'),
+            'classes': ('collapse',)
+        }),
     )
     
     def has_add_permission(self, request):

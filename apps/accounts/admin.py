@@ -7,7 +7,11 @@ class UserAdmin(BaseUserAdmin):
     list_display = ('username', 'email', 'role', 'is_staff')
     list_filter = ('role', 'is_staff', 'is_superuser')
     fieldsets = BaseUserAdmin.fieldsets + (
-        (None, {'fields': ('role', 'profile_image')}),
+        ('Profile', {'fields': ('role', 'profile_image', 'bio')}),
+        ('Social Media', {
+            'fields': ('facebook_url', 'twitter_url', 'instagram_url', 'linkedin_url', 'github_url'),
+            'classes': ('collapse',)
+        }),
     )
     add_fieldsets = BaseUserAdmin.add_fieldsets + (
         (None, {'fields': ('role',)}),

@@ -153,20 +153,56 @@
                             href="{% url 'blog:about' %}">About</a></li>
                 </ul>
             </nav>
+
+
             <div class="flex items-center text-lg no-underline text-gray-800 gap-6">
-                <a class="hover:text-primary transition duration-300 transform hover:scale-110" href="#">
+
+
+
+                {% if theme.facebook_url %}
+                <a href="{{ theme.facebook_url }}" target="_blank" rel="noopener"
+                    class="hover:text-primary transition duration-300 transform hover:scale-110">
                     <i class="fab fa-facebook"></i>
                 </a>
-                <a class="hover:text-primary transition duration-300 transform hover:scale-110" href="#">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <a class="hover:text-primary transition duration-300 transform hover:scale-110" href="#">
+                {% endif %}
+
+                {% if theme.twitter_url %}
+                <a href="{{ theme.twitter_url }}" target="_blank" rel="noopener"
+                    class="hover:text-primary transition duration-300 transform hover:scale-110">
                     <i class="fab fa-twitter"></i>
                 </a>
-                <a class="hover:text-primary transition duration-300 transform hover:scale-110" href="#">
+                {% endif %}
+
+                {% if theme.instagram_url %}
+                <a href="{{ theme.instagram_url }}" target="_blank" rel="noopener"
+                    class="hover:text-primary transition duration-300 transform hover:scale-110">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                {% endif %}
+
+                {% if theme.linkedin_url %}
+                <a href="{{ theme.linkedin_url }}" target="_blank" rel="noopener"
+                    class="hover:text-primary transition duration-300 transform hover:scale-110">
                     <i class="fab fa-linkedin"></i>
                 </a>
+                {% endif %}
+
+                {% if theme.github_url %}
+                <a href="{{ theme.github_url }}" target="_blank" rel="noopener"
+                    class="hover:text-primary transition duration-300 transform hover:scale-110">
+                    <i class="fab fa-github"></i>
+                </a>
+                {% endif %}
+
+
+
+
+
+
             </div>
+
+
+
         </div>
     </nav>
 
@@ -190,6 +226,50 @@
                     class="uppercase px-3 hover:text-primary transition duration-300 text-sm font-semibold">Contact
                     Us</a>
             </div>
+
+            <!-- Social Media Links -->
+
+            <div class="flex justify-center gap-4 text-2xl mb-4">
+
+                {% if theme.facebook_url %}
+                <a href="{{ theme.facebook_url }}" target="_blank" rel="noopener"
+                    class="text-gray-600 hover:text-blue-600 transition transform hover:scale-110">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                {% endif %}
+
+                {% if theme.twitter_url %}
+                <a href="{{ theme.twitter_url }}" target="_blank" rel="noopener"
+                    class="text-gray-600 hover:text-blue-400 transition transform hover:scale-110">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                {% endif %}
+
+                {% if theme.instagram_url %}
+                <a href="{{ theme.instagram_url }}" target="_blank" rel="noopener"
+                    class="text-gray-600 hover:text-pink-600 transition transform hover:scale-110">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                {% endif %}
+
+                {% if theme.linkedin_url %}
+                <a href="{{ theme.linkedin_url }}" target="_blank" rel="noopener"
+                    class="text-gray-600 hover:text-blue-700 transition transform hover:scale-110">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                {% endif %}
+
+                {% if theme.github_url %}
+                <a href="{{ theme.github_url }}" target="_blank" rel="noopener"
+                    class="text-gray-600 hover:text-gray-900 transition transform hover:scale-110">
+                    <i class="fab fa-github"></i>
+                </a>
+                {% endif %}
+
+            </div>
+
+
+
             <div class="text-gray-500 text-sm">&copy; {% now "Y" %} Django Blog. All rights reserved.</div>
         </div>
     </footer>
