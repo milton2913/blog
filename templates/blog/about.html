@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}About Us - Django Blog{% endblock %}
+
+{% block content %}
+<div class="w-full max-w-4xl mx-auto px-4 py-8">
+    <div class="glass-card rounded-2xl p-8 md:p-12 text-center md:text-left shadow-xl">
+        <h1 class="text-4xl font-bold text-gray-800 mb-6 border-b border-gray-200 pb-4">About Us</h1>
+
+        <div class="flex flex-col md:flex-row gap-8 items-center">
+            <div class="w-full md:w-1/3">
+                <div
+                    class="relative w-48 h-48 mx-auto rounded-full overflow-hidden shadow-lg border-4 border-white transform hover:scale-105 transition duration-500">
+                    <img src="https://source.unsplash.com/random/400x400/?portrait,developer" alt="Author"
+                        class="w-full h-full object-cover">
+                </div>
+            </div>
+
+            <div class="w-full md:w-2/3 prose prose-lg text-gray-600 leading-relaxed">
+                <p class="mb-4">
+                    Welcome to <strong>Django Blog</strong>, a space dedicated to sharing knowledge about web
+                    development, programming, and technology.
+                </p>
+                <p class="mb-4">
+                    Our mission is to provide high-quality tutorials, guides, and insights to help developers of all
+                    levels improve their skills. Whether you're just starting with Python and Django or looking for
+                    advanced optimization techniques, you'll find something valuable here.
+                </p>
+                <p>
+                    We believe in the power of community and open source. Feel free to explore our articles, leave
+                    comments, and join the discussion.
+                </p>
+            </div>
+        </div>
+
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+            <div class="glass p-6 rounded-xl hover:bg-white/80 transition">
+                <i class="fas fa-code text-4xl text-primary mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Web Development</h3>
+                <p class="text-gray-600 text-sm">Best practices in Django, Python, and modern web technologies.</p>
+            </div>
+            <div class="glass p-6 rounded-xl hover:bg-white/80 transition">
+                <i class="fas fa-layer-group text-4xl text-primary mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Design Patterns</h3>
+                <p class="text-gray-600 text-sm">Scalable architecture and clean code principles.</p>
+            </div>
+            <div class="glass p-6 rounded-xl hover:bg-white/80 transition">
+                <i class="fas fa-users text-4xl text-primary mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Community</h3>
+                <p class="text-gray-600 text-sm">A vibrant community of learners and experts.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}All Categories - Django Blog{% endblock %}
+
+{% block content %}
+<div class="w-full max-w-6xl mx-auto px-4 py-8">
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">Explore Categories</h1>
+        <p class="text-gray-600 text-lg max-w-2xl mx-auto">Browse our diverse topics and find exactly what you're
+            looking for.</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {% for cat in categories %}
+        <a href="{% url 'blog:category_list' cat.slug %}"
+            class="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 h-64 flex flex-col justify-end p-6 glass-card transform hover:-translate-y-1">
+
+            {% if cat.feature_image %}
+            <div class="absolute inset-0 z-0">
+                <img src="{{ cat.feature_image.url }}" alt="{{ cat.name }}"
+                    class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+            </div>
+            {% else %}
+            <div class="absolute inset-0 bg-white/40 backdrop-blur-sm z-0 group-hover:bg-white/60 transition"></div>
+            {% endif %}
+
+            <div class="relative z-10 w-full">
+                <div class="mb-3">
+                    <span
+                        class="inline-flex items-center justify-center w-12 h-12 rounded-full {% if cat.feature_image %}bg-white/20 text-white backdrop-blur-md{% else %}bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white{% endif %} transition duration-300 text-xl">
+                        {% if cat.icon %}
+                        <i class="{{ cat.icon }}"></i>
+                        {% else %}
+                        <i class="fas fa-folder-open"></i>
+                        {% endif %}
+                    </span>
+                </div>
+
+                <h3
+                    class="text-2xl font-bold {% if cat.feature_image %}text-white{% else %}text-gray-800{% endif %} mb-1 group-hover:text-primary transition">
+                    {{ cat.name }}</h3>
+
+                <p
+                    class="text-sm {% if cat.feature_image %}text-gray-200{% else %}text-gray-500{% endif %} line-clamp-2 mb-4">
+                    {{ cat.description }}</p>
+
+                <div
+                    class="flex justify-between items-center text-xs font-semibold {% if cat.feature_image %}text-gray-300{% else %}text-gray-400{% endif %} border-t {% if cat.feature_image %}border-white/20{% else %}border-gray-200{% endif %} pt-3 w-full">
+                    <span>{{ cat.post_count }} Posts</span>
+                    <span class="transform group-hover:translate-x-1 transition-transform"><i
+                            class="fas fa-arrow-right"></i></span>
+                </div>
+            </div>
+        </a>
+        {% empty %}
+        <p class="col-span-full text-center text-gray-500">No categories found.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

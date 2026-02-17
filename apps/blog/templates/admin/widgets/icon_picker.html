@@ -1,0 +1,106 @@
+<div class="icon-picker-widget">
+    <div class="flex items-center gap-3 mb-2">
+        <div id="icon-preview-{{ widget.name }}"
+            class="w-10 h-10 flex items-center justify-center bg-gray-200 rounded text-xl">
+            <i class="{{ widget.value|default:'fas fa-question' }}"></i>
+        </div>
+        <input type="{{ widget.type }}" name="{{ widget.name }}" value="{{ widget.value|default:'' }}" {%
+            include "django/forms/widgets/attrs.html" %} id="id_{{ widget.name }}">
+        <button type="button" onclick="document.getElementById('icon-modal-{{ widget.name }}').style.display='flex'"
+            class="button"
+            style="padding: 5px 10px; background: #417690; color: white; border: none; border-radius: 4px; cursor: pointer;">
+            Select Icon
+        </button>
+    </div>
+
+    <!-- Modal -->
+    <div id="icon-modal-{{ widget.name }}"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; bg-black/50; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+        <div
+            style="background:white; padding:20px; border-radius:8px; width:80%; max-width:800px; max-height:80vh; overflow-y:auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <div
+                style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                <h3 style="margin:0; font-size:1.2rem;">Select an Icon</h3>
+                <button type="button"
+                    onclick="document.getElementById('icon-modal-{{ widget.name }}').style.display='none'"
+                    style="background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+            </div>
+
+            <input type="text" placeholder="Search icons..." onkeyup="filterIcons(this.value, '{{ widget.name }}')"
+                style="width:100%; padding:8px; margin-bottom:15px; border:1px solid #ddd; border-radius:4px;">
+
+            <div id="icon-grid-{{ widget.name }}"
+                style="display:grid; grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap:10px;">
+                <!-- Icons will be injected here by JS -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const faIcons = [
+        "fas fa-folder", "fas fa-folder-open", "fas fa-code", "fas fa-laptop-code", "fas fa-terminal",
+        "fas fa-bug", "fas fa-database", "fas fa-server", "fas fa-network-wired", "fas fa-microchip",
+        "fas fa-mobile-alt", "fas fa-tablet-alt", "fas fa-desktop", "fas fa-keyboard", "fas fa-mouse",
+        "fas fa-camera", "fas fa-video", "fas fa-music", "fas fa-podcast", "fas fa-rss",
+        "fas fa-satellite", "fas fa-wifi", "fas fa-cloud", "fas fa-cloud-upload-alt", "fas fa-cloud-download-alt",
+        "fas fa-comment", "fas fa-comments", "fas fa-quote-left", "fas fa-hashtag", "fas fa-at",
+        "fas fa-user", "fas fa-users", "fas fa-user-circle", "fas fa-user-secret", "fas fa-id-card",
+        "fas fa-envelope", "fas fa-envelope-open", "fas fa-paper-plane", "fas fa-inbox", "fas fa-phone",
+        "fas fa-home", "fas fa-building", "fas fa-city", "fas fa-store", "fas fa-school",
+        "fas fa-book", "fas fa-book-open", "fas fa-bookmark", "fas fa-pen", "fas fa-pencil-alt",
+        "fas fa-file", "fas fa-file-alt", "fas fa-file-image", "fas fa-file-code", "fas fa-file-pdf",
+        "fas fa-cog", "fas fa-cogs", "fas fa-tools", "fas fa-wrench", "fas fa-screwdriver",
+        "fas fa-search", "fas fa-search-plus", "fas fa-globe", "fas fa-flag", "fas fa-map-marker-alt",
+        "fas fa-star", "fas fa-heart", "fas fa-thumbs-up", "fas fa-check", "fas fa-check-circle",
+        "fas fa-times", "fas fa-times-circle", "fas fa-info-circle", "fas fa-question-circle", "fas fa-exclamation-circle",
+        "fas fa-arrow-right", "fas fa-arrow-left", "fas fa-chevron-right", "fas fa-chevron-left", "fas fa-caret-down",
+        "fab fa-python", "fab fa-js", "fab fa-html5", "fab fa-css3-alt", "fab fa-react",
+        "fab fa-vuejs", "fab fa-angular", "fab fa-node", "fab fa-docker", "fab fa-aws",
+        "fab fa-github", "fab fa-gitlab", "fab fa-bitbucket", "fab fa-linux", "fab fa-windows",
+        "fab fa-apple", "fab fa-android", "fab fa-google", "fab fa-facebook", "fab fa-twitter",
+        "fab fa-instagram", "fab fa-linkedin", "fab fa-youtube", "fab fa-discord", "fab fa-slack"
+    ];
+
+    function initIconPicker(widgetName) {
+        const grid = document.getElementById('icon-grid-' + widgetName);
+        grid.innerHTML = '';
+
+        faIcons.forEach(icon => {
+            const btn = document.createElement('div');
+            btn.className = 'icon-option';
+            btn.style.cssText = 'display:flex; flex-direction:column; align-items:center; justify-content:center; padding:10px; border:1px solid #eee; border-radius:4px; cursor:pointer; hover:bg-gray-100;';
+            btn.innerHTML = `<i class="${icon}" style="font-size:1.5rem; color:#555;"></i>`;
+            btn.title = icon;
+
+            btn.onclick = function () {
+                document.getElementById('id_' + widgetName).value = icon;
+                document.getElementById('icon-preview-' + widgetName).innerHTML = `<i class="${icon}"></i>`;
+                document.getElementById('icon-modal-' + widgetName).style.display = 'none';
+            };
+
+            grid.appendChild(btn);
+        });
+    }
+
+    function filterIcons(query, widgetName) {
+        const grid = document.getElementById('icon-grid-' + widgetName);
+        const buttons = grid.getElementsByClassName('icon-option');
+        query = query.toLowerCase();
+
+        for (let i = 0; i < buttons.length; i++) {
+            const btn = buttons[i];
+            const iconClass = btn.getElementsByTagName('i')[0].className;
+            if (iconClass.includes(query)) {
+                btn.style.display = 'flex';
+            } else {
+                btn.style.display = 'none';
+            }
+        }
+    }
+
+    // Initialize when modal is opened for the first time or on load
+    document.addEventListener('DOMContentLoaded', function () {
+        initIconPicker('{{ widget.name }}');
+    });
+</script>

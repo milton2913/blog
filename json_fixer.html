@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Stringified Field Fixer</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-gray-100 to-gray-200 min-h-screen flex flex-col items-center justify-center p-4">
+
+    <div
+        class="glass-card shadow-2xl rounded-2xl w-full max-w-2xl p-8 transform transition-all hover:scale-[1.01] duration-300">
+
+        <div class="text-center mb-8">
+            <div
+                class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 text-blue-600 mb-4 shadow-sm">
+                <i class="fas fa-file-code text-3xl"></i>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-800 tracking-tight">JSON Fixer</h1>
+            <p class="text-gray-500 mt-2">Upload a JSON file to automatically parse stringified fields into proper JSON
+                objects/arrays.</p>
+        </div>
+
+        <!-- Input Section -->
+        <div class="mb-8">
+            <div class="flex items-center justify-center w-full">
+                <label for="jsonFile"
+                    class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-white hover:border-blue-400 transition duration-300 group">
+                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                        <i
+                            class="fas fa-cloud-upload-alt text-4xl text-gray-400 group-hover:text-blue-500 mb-3 transition duration-300"></i>
+                        <p class="mb-2 text-sm text-gray-500"><span class="font-semibold text-gray-700">Click to
+                                upload</span> or drag and drop</p>
+                        <p class="text-xs text-gray-400">JSON files only</p>
+                    </div>
+                    <input id="jsonFile" type="file" class="hidden" accept=".json" onchange="handleFileSelect(event)" />
+                </label>
+            </div>
+            <div id="fileNameDisplay" class="mt-4 text-center text-sm font-medium text-gray-700 hidden">
+                Selected: <span id="fileName" class="text-blue-600"></span>
+            </div>
+        </div>
+
+        <!-- Status & Actions -->
+        <div class="space-y-4">
+            <!-- Progress / Status -->
+            <div id="statusArea" class="hidden p-4 rounded-lg bg-blue-50 border border-blue-100 flex items-start">
+                <i class="fas fa-info-circle text-blue-500 mt-1 mr-3"></i>
+                <div>
+                    <h3 class="font-semibold text-blue-800">Status</h3>
+                    <p id="statusText" class="text-sm text-blue-700 mt-1"></p>
+                </div>
+            </div>
+
+            <!-- Error Message -->
+            <div id="errorArea" class="hidden p-4 rounded-lg bg-red-50 border border-red-100 flex items-start">
+                <i class="fas fa-exclamation-circle text-red-500 mt-1 mr-3"></i>
+                <div class="w-full">
+                    <h3 class="font-semibold text-red-800">Error</h3>
+                    <p id="errorText" class="text-sm text-red-700 mt-1 break-words"></p>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mt-6">
+                <button id="processBtn" onclick="processFile()" disabled
+                    class="flex-1 bg-gray-400 text-white font-bold py-3 px-6 rounded-xl transition duration-300 flex items-center justify-center shadow-md cursor-not-allowed">
+                    <i class="fas fa-magic mr-2"></i> Fix & Parse
+                </button>
+
+                <a id="downloadBtn"
+                    class="hidden flex-1 bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-xl transition duration-300 flex items-center justify-center shadow-md shadow-green-200 cursor-pointer text-decoration-none">
+                    <i class="fas fa-download mr-2"></i> Download Fixed File
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedFile = null;
+        let fileContent = null;
+        let fixedContent = null;
+        let stats = { fixedCount: 0 };
+
+        function handleFileSelect(event) {
+            const fileInput = event.target;
+            const fileNameSpan = document.getElementById('fileName');
+            const fileNameDisplay = document.getElementById('fileNameDisplay');
+            const processBtn = document.getElementById('processBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const statusArea = document.getElementById('statusArea');
+            const errorArea = document.getElementById('errorArea');
+
+            // Reset UI
+            downloadBtn.classList.add('hidden');
+            statusArea.classList.add('hidden');
+            errorArea.classList.add('hidden');
+
+            if (fileInput.files.length > 0) {
+                selectedFile = fileInput.files[0];
+                fileNameSpan.textContent = selectedFile.name;
+                fileNameDisplay.classList.remove('hidden');
+
+                // Enable process button
+                processBtn.disabled = false;
+                processBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+                processBtn.classList.add('bg-blue-600', 'hover:bg-blue-700', 'cursor-pointer', 'shadow-blue-200');
+            } else {
+                selectedFile = null;
+                fileNameDisplay.classList.add('hidden');
+                processBtn.disabled = true;
+                processBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
+                processBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700', 'cursor-pointer', 'shadow-blue-200');
+            }
+        }
+
+        function processFile() {
+            if (!selectedFile) return;
+
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                try {
+                    const rawData = e.target.result;
+                    const jsonObject = JSON.parse(rawData);
+
+                    // Reset stats
+                    stats.fixedCount = 0;
+
+                    // Recursive fix
+                    const fixedObject = recursiveFix(jsonObject);
+
+                    fixedContent = JSON.stringify(fixedObject, null, 2); // Pretty print with 2 spaces
+
+                    // Update UI
+                    showStatus(`Successfully processed! Fixed <strong>${stats.fixedCount}</strong> stringified fields.`);
+                    setupDownload(fixedContent, selectedFile.name);
+
+                } catch (error) {
+                    showError("Invalid JSON file: " + error.message);
+                }
+            };
+
+            reader.onerror = function () {
+                showError("Error reading file.");
+            };
+
+            reader.readAsText(selectedFile);
+        }
+
+        function recursiveFix(obj) {
+            // Base case: if it's a string, try to parse it
+            if (typeof obj === 'string') {
+                // Heuristic: only try to parse if it looks like JSON array or object
+                const trimmed = obj.trim();
+                if ((trimmed.startsWith('{') && trimmed.endsWith('}')) ||
+                    (trimmed.startsWith('[') && trimmed.endsWith(']'))) {
+                    try {
+                        const parsed = JSON.parse(obj);
+                        // Only accept if it parses to an object or array (not primitives like number/boolean inside string)
+                        if (typeof parsed === 'object' && parsed !== null) {
+                            stats.fixedCount++;
+                            // Recursively fix the parsed object as it might contain more nested strings
+                            return recursiveFix(parsed);
+                        }
+                    } catch (e) {
+                        // Not valid JSON, return original string
+                        return obj;
+                    }
+                }
+                return obj;
+            }
+
+            // Recursive step for Arrays
+            if (Array.isArray(obj)) {
+                return obj.map(item => recursiveFix(item));
+            }
+
+            // Recursive step for Objects
+            if (typeof obj === 'object' && obj !== null) {
+                for (const key in obj) {
+                    obj[key] = recursiveFix(obj[key]);
+                }
+                return obj;
+            }
+
+            // Return primitive as is
+            return obj;
+        }
+
+        function showStatus(messageHtml) {
+            const statusArea = document.getElementById('statusArea');
+            const statusText = document.getElementById('statusText');
+            const errorArea = document.getElementById('errorArea');
+
+            errorArea.classList.add('hidden');
+            statusText.innerHTML = messageHtml;
+            statusArea.classList.remove('hidden');
+        }
+
+        function showError(message) {
+            const errorArea = document.getElementById('errorArea');
+            const errorText = document.getElementById('errorText');
+            const statusArea = document.getElementById('statusArea');
+
+            statusArea.classList.add('hidden');
+            errorText.textContent = message;
+            errorArea.classList.remove('hidden');
+        }
+
+        function setupDownload(content, originalName) {
+            const downloadBtn = document.getElementById('downloadBtn');
+            const blob = new Blob([content], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+
+            // Create new filename: comments.json -> comments_fixed.json
+            const nameParts = originalName.split('.');
+            let newName = "fixed_file.json";
+            if (nameParts.length > 1) {
+                const ext = nameParts.pop();
+                newName = nameParts.join('.') + '_fixed.' + ext;
+            } else {
+                newName = originalName + '_fixed';
+            }
+
+            downloadBtn.href = url;
+            downloadBtn.download = newName;
+            downloadBtn.classList.remove('hidden');
+        }
+    </script>
+</body>
+
+</html>

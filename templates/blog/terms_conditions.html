@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Terms & Conditions - Django Blog{% endblock %}
+
+{% block content %}
+<div class="w-full max-w-4xl mx-auto px-4 py-8">
+    <div class="glass-card rounded-2xl p-8 md:p-12 shadow-xl">
+        <h1 class="text-4xl font-bold text-gray-800 mb-6 border-b border-gray-200 pb-4">Terms & Conditions</h1>
+
+        <div class="prose prose-lg text-gray-600 leading-relaxed">
+            <p>Last updated: {% now "F j, Y" %}</p>
+
+            <h3>1. Introduction</h3>
+            <p>Welcome to Django Blog. By accessing and using this website, you accept and agree to be bound by the
+                terms and conditions outlined below. If you do not agree with any part of these terms, please do not use
+                our website.</p>
+
+            <h3>2. Use of Content</h3>
+            <p>All content published on this blog, including articles, images, and other materials, is for informational
+                purposes only. You may read, share, and reference the content for personal and educational use. However,
+                you may not copy, reproduce, republish, or distribute any material without proper permission.</p>
+
+            <h3>3. User Responsibilities</h3>
+            <ul>
+                <li>You agree to use this website only for lawful purposes.</li>
+                <li>You must not post or share harmful, abusive, or misleading content.</li>
+                <li>You are responsible for any comments or content you submit.</li>
+            </ul>
+
+            <h3>4. Intellectual Property</h3>
+            <p>All blog content, design, and branding are the property of Django Blog unless otherwise stated.
+                Unauthorized use, copying, or redistribution of content is strictly prohibited.</p>
+
+            <h3>5. Third-Party Links</h3>
+            <p>This blog may contain links to external websites. We are not responsible for the content, policies, or
+                practices of any third-party sites.</p>
+
+            <h3>6. Limitation of Liability</h3>
+            <p>We make every effort to provide accurate and up-to-date information. However, we do not guarantee the
+                completeness or reliability of any content. We are not liable for any losses or damages resulting from
+                the use of this website.</p>
+
+            <h3>7. Changes to Terms</h3>
+            <p>We may update these Terms & Conditions at any time without prior notice. Continued use of the website
+                after changes means you accept the updated terms.</p>
+
+            <h3>8. Contact</h3>
+            <p>If you have any questions regarding these Terms & Conditions, please contact us through the website.</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

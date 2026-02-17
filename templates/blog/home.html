@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load blog_extras %}
+
+{% block content %}
+
+<section class="w-full md:w-2/3 flex flex-col items-center px-3">
+
+    <div class="w-full mb-8">
+        {% block page_title %}
+        <h1 class="text-4xl font-bold text-gray-800 mb-2">Latest Articles</h1>
+        <p class="text-gray-600">Discover the latest insights, tutorials, and news.</p>
+        {% endblock %}
+    </div>
+
+    <div class="grid grid-cols-1 gap-8 w-full">
+        {% for post in posts %}
+        <article class="glass-card rounded-2xl overflow-hidden shadow-lg flex flex-col md:flex-row h-full group">
+            <!-- Article Image -->
+            <a href="{% url 'blog:post_detail' post.slug %}"
+                class="w-full md:w-2/5 h-64 md:h-auto overflow-hidden relative block">
+                {% if post.featured_image %}
+                <img src="{{ post.featured_image.url }}"
+                    class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500 ease-in-out">
+                {% else %}
+                <div
+                    class="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center text-gray-500 group-hover:scale-105 transition duration-500">
+                    <i class="fas fa-image text-4xl"></i>
+                </div>
+                {% endif %}
+                <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition duration-300"></div>
+            </a>
+
+            <div class="w-full md:w-3/5 bg-white/60 p-6 flex flex-col justify-between backdrop-blur-sm">
+                <div>
+                    <div class="flex items-center gap-3 mb-3">
+                        <a href="{% url 'blog:category_list' post.category.slug %}"
+                            class="text-xs font-bold uppercase tracking-wider text-primary bg-blue-100 px-2 py-1 rounded-md hover:bg-blue-200 transition">
+                            {{ post.category.name }}
+                        </a>
+                        <span class="text-xs text-gray-500 flex items-center gap-1">
+                            <i class="far fa-clock"></i> {{ post.published_at|timesince }} ago
+                        </span>
+                    </div>
+
+                    <a href="{% url 'blog:post_detail' post.slug %}" class="block">
+                        <h2
+                            class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-primary transition leading-tight">
+                            {{ post.title }}</h2>
+                    </a>
+
+                    <p class="text-gray-600 mb-4 line-clamp-3 text-sm leading-relaxed">
+                        {{ post.content|striptags|truncatewords:25 }}
+                    </p>
+                </div>
+
+                <div class="flex items-center justify-between border-t border-gray-200pt-4 mt-auto pt-4">
+                    <div class="flex items-center">
+                        <div
+                            class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xs mr-2 shadow-sm">
+                            {{ post.author.username|slice:":1"|upper }}
+                        </div>
+                        <span class="text-sm font-semibold text-gray-700">{{ post.author.username }}</span>
+                    </div>
+                    <a href="{% url 'blog:post_detail' post.slug %}"
+                        class="text-sm font-bold text-primary group-hover:underline flex items-center gap-1">
+                        Read <i class="fas fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+            </div>
+        </article>
+        {% empty %}
+        <div class="glass-card rounded-xl p-12 text-center text-gray-500">
+            <i class="fas fa-newspaper text-6xl mb-4 text-gray-300"></i>
+            <p class="text-xl">No posts found yet.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if posts.has_other_pages %}
+    <div class="flex items-center py-8">
+        <!-- Pagination logic placeholder -->
+        <!-- Django Pagination -->
+        <div class="flex gap-2">
+            {% if posts.has_previous %}
+            <a href="?page={{ posts.previous_page_number }}"
+                class="glass-card px-4 py-2 rounded-lg text-gray-700 hover:text-primary font-bold transition">Previous</a>
+            {% endif %}
+
+            <span class="glass-card px-4 py-2 rounded-lg text-gray-500 font-bold bg-gray-100">
+                Page {{ posts.number }} of {{ posts.paginator.num_pages }}
+            </span>
+
+            {% if posts.has_next %}
+            <a href="?page={{ posts.next_page_number }}"
+                class="glass-card px-4 py-2 rounded-lg text-gray-700 hover:text-primary font-bold transition">Next</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+</section>
+
+{% show_sidebar %}
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'blog/home.html' %}
+
+{% block title %}Tag: {{ tag.name }} | {{ theme.site_name }}{% endblock %}
+
+{% block meta_description %}Posts tagged with {{ tag.name }} on {{ theme.site_name }}.{% endblock %}
+{% block meta_keywords %}{{ tag.name }}, {{ theme.site_keywords }}{% endblock %}
+
+{% block og_title %}Tag: {{ tag.name }} | {{ theme.site_name }}{% endblock %}
+{% block og_description %}Posts tagged with {{ tag.name }} on {{ theme.site_name }}.{% endblock %}
+
+{% block twitter_title %}Tag: {{ tag.name }} | {{ theme.site_name }}{% endblock %}
+{% block twitter_description %}Posts tagged with {{ tag.name }} on {{ theme.site_name }}.{% endblock %}
+
+{% block page_title %}
+<h1 class="text-4xl font-bold text-gray-800 mb-2">Tag: #{{ tag.name }}</h1>
+<p class="text-gray-600">Explore posts tagged with #{{ tag.name }}.</p>
+{% endblock %}

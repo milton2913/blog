@@ -1,0 +1,9 @@
+{% extends 'blog/home.html' %}
+
+{% block title %}Search: {{ query }} - Django Blog{% endblock %}
+
+{% block page_title %}
+<h1 class="text-4xl font-bold text-gray-800 mb-2">Search Results</h1>
+<p class="text-gray-600">Found {{ posts|length }} result{{ posts|length|pluralize }} for "<span
+        class="font-bold text-primary">{{ query }}</span>".</p>
+{% endblock %}
