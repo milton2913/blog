@@ -177,7 +177,89 @@
     </div>
     {% endif %}
 
+    <!-- Comments Section -->
+    <div class="w-full mt-8" x-data="{
+            async submitForm(e) {
+                const form = e.target;
+                const formData = new FormData(form);
+                formData.append('ajax', '1');
+                
+                try {
+                    const response = await fetch(form.action || window.location.href, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const html = await response.text();
+                        // Update comments list
+                        document.querySelector('.comments-list').innerHTML = html;
+                        // Reset form if it's the main one
+                        if (!form.querySelector('input[name=parent_id]')) {
+                             form.reset();
+                        } else {
+                            // Hide reply form
+                            form.closest('[id^=reply-form-]').classList.add('hidden');
+                        }
+                    } else {
+                        console.error('Submission failed');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }
+         }" x-on:submit.prevent="submitForm($event)">
+
+        <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+            <i class="fas fa-comments text-primary"></i> Comments ({{ post.comments.count }})
+        </h3>
+
+        <!-- Main Comment Form -->
+        <div class="glass-card w-full shadow-lg rounded-2xl p-8 mb-12">
+            <h4 class="text-lg font-bold text-gray-800 mb-4">Leave a Comment</h4>
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="grid grid-cols-1 gap-4">
+                    {% if not user.is_authenticated %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>{{ comment_form.name }}</div>
+                        <div>{{ comment_form.email }}</div>
+                    </div>
+                    {% else %}
+                    <input type="hidden" name="name" value="{{ user.get_full_name|default:user.username }}">
+                    <input type="hidden" name="email" value="{{ user.email }}">
+                    {% endif %}
+                    <div>{{ comment_form.body }}</div>
+                </div>
+
+                <button type="submit"
+                    class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold transition shadow-lg transform hover:scale-105">
+                    Post Comment
+                </button>
+            </form>
+        </div>
+
+        <!-- Comments List -->
+        <div class="comments-list w-full">
+            {% include "blog/comments.html" %}
+        </div>
+    </div>
 </section>
+
+<script>
+    function toggleReplyForm(commentId) {
+        const form = document.getElementById(`reply-form-${commentId}`);
+        if (form.classList.contains('hidden')) {
+            form.classList.remove('hidden');
+        } else {
+            form.classList.add('hidden');
+        }
+    }
+</script>
 
 {% show_sidebar %}
 

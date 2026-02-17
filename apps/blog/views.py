@@ -1,7 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q, Count
 from django.core.paginator import Paginator
-from .models import Post, Category, Tag
+from .models import Post, Category, Tag, Comment
+from .forms import CommentForm
+from django.contrib import messages
 
 def home(request):
     posts_list = Post.objects.filter(status='published').order_by('-published_at')
@@ -12,8 +14,50 @@ def home(request):
 
 def post_detail(request, slug):
     post = get_object_or_404(Post, slug=slug, status='published')
+    
+    # Handle Comment Submission
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.post = post
+            if request.user.is_authenticated:
+                new_comment.author = request.user
+            
+            # Handle Reply
+            parent_id = request.POST.get('parent_id')
+            if parent_id:
+                try:
+                    parent_comment = Comment.objects.get(id=parent_id)
+                    new_comment.parent = parent_comment
+                except Comment.DoesNotExist:
+                    pass
+            
+            new_comment.save()
+            if request.POST.get('ajax') == '1':
+                comments = post.comments.filter(active=True, parent__isnull=True)
+                return render(request, 'blog/comments.html', {'comments': comments})
+
+            messages.success(request, 'Your comment has been submitted!')
+            return redirect('blog:post_detail', slug=post.slug)
+    else:
+        initial_data = {}
+        if request.user.is_authenticated:
+            initial_data = {
+                'name': request.user.get_full_name() or request.user.username,
+                'email': request.user.email
+            }
+        comment_form = CommentForm(initial=initial_data)
+
+    comments = post.comments.filter(active=True, parent__isnull=True)
     related_posts = Post.objects.filter(tags__in=post.tags.all(), status='published').exclude(id=post.id).distinct()[:3]
-    return render(request, 'blog/post_detail.html', {'post': post, 'related_posts': related_posts})
+    
+    return render(request, 'blog/post_detail.html', {
+        'post': post,
+        'comments': comments,
+        'comment_form': comment_form,
+        'related_posts': related_posts
+    })
 
 def category_list(request, slug):
     category = get_object_or_404(Category, slug=slug)
