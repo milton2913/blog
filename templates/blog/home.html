@@ -55,10 +55,15 @@
 
                 <div class="flex items-center justify-between border-t border-gray-200pt-4 mt-auto pt-4">
                     <div class="flex items-center">
+                        {% if post.author.profile_image %}
+                        <img src="{{ post.author.profile_image.url }}" alt="{{ post.author.username }}"
+                            class="w-8 h-8 rounded-full object-cover mr-2 shadow-sm">
+                        {% else %}
                         <div
                             class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xs mr-2 shadow-sm">
                             {{ post.author.username|slice:":1"|upper }}
                         </div>
+                        {% endif %}
                         <span class="text-sm font-semibold text-gray-700">{{ post.author.username }}</span>
                     </div>
                     <a href="{% url 'blog:post_detail' post.slug %}"

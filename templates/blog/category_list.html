@@ -7,8 +7,9 @@
 {% block meta_keywords %}{{ category.meta_keywords|default:theme.site_keywords }}{% endblock %}
 
 {% block og_title %}{{ category.meta_title|default:category.name }}{% endblock %}
-{% block og_description %}{{ category.meta_description|default:category.description|default:theme.site_description }}{%
-endblock %}
+{% block og_description %}
+{{ category.meta_description|default:category.description|default:theme.site_description }}
+{% endblock %}
 {% block og_image %}
 {% if category.feature_image %}
 <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ category.feature_image.url }}">
