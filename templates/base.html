@@ -56,29 +56,13 @@
 
     <style>
         :root {
-            --primary: {
-                    {
-                    theme.primary_color
-                }
-            }
-
-            ;
-
-            --bg-color: {
-                    {
-                    theme.background_color theme.glass_blur
-                }
-            }
-
-            px;
-
-            --border-radius: {
-                    {
-                    theme.border_radius
-                }
-            }
-
-            ;
+            --primary: #2B7DDD;
+            --bg-color: #F3F4F6;
+            --text-color: #1F2937;
+            --link-color: #2563EB;
+            --glass-opacity: 0.70;
+            --glass-blur: 10px;
+            --border-radius: 1rem;
         }
 
         .glass {
@@ -140,6 +124,18 @@
             opacity: 0.8;
         }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var r = document.documentElement;
+            r.style.setProperty('--primary', '{{ theme.primary_color }}');
+            r.style.setProperty('--bg-color', '{{ theme.background_color }}');
+            r.style.setProperty('--text-color', '{{ theme.text_color }}');
+            r.style.setProperty('--link-color', '{{ theme.link_color }}');
+            r.style.setProperty('--glass-opacity', '{{ theme.glass_opacity }}');
+            r.style.setProperty('--glass-blur', '{{ theme.glass_blur }}px');
+            r.style.setProperty('--border-radius', '{{ theme.border_radius }}');
+        });
+    </script>
 </head>
 
 <body class="leading-normal tracking-normal text-gray-900 flex flex-col min-h-screen">
@@ -213,8 +209,6 @@
                     <i class="fab fa-github"></i>
                 </a>
                 {% endif %}
-
-
 
 
 

@@ -122,6 +122,14 @@ class ThemeSettings(models.Model):
             # If you want to ensure only one instance, enabling this check prevents creating more.
             # But for simplicity in admin, we can just grab the first one.
             pass
+        
+        # Ensure colors start with #
+        color_fields = ['primary_color', 'background_color', 'text_color', 'link_color']
+        for field in color_fields:
+            value = getattr(self, field)
+            if value and not value.startswith('#'):
+                setattr(self, field, f'#{value}')
+                
         super().save(*args, **kwargs)
 
 class Comment(models.Model):
