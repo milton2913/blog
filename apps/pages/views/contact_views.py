@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib import messages
-from apps.blog.forms import ContactForm
+from blog.forms import ContactForm
 
 def contact(request):
     if request.method == 'POST':

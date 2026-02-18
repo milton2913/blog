@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from apps.blog.models import ThemeSettings
+from blog.models import ThemeSettings
 
 class Command(BaseCommand):
     help = 'Fixes ThemeSettings color fields by ensuring they start with #'

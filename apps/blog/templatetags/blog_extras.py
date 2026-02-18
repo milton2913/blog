@@ -1,6 +1,6 @@
 from django import template
-from apps.blog.services.category_service import CategoryService, TagService
-from apps.blog.services.post_service import PostService
+from blog.services.category_service import CategoryService, TagService
+from blog.services.post_service import PostService
 
 register = template.Library()
 

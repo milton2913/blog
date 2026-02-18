@@ -1,4 +1,4 @@
-{% load static tailwind_tags %}
+{% load static tailwind_tags menu_tags %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -144,12 +144,33 @@
             <nav>
                 <ul
                     class="flex items-center justify-between font-bold text-sm text-gray-800 uppercase no-underline gap-8">
+                    {% get_menu 'main-menu' as menu_items %}
+                    {% if menu_items %}
+                    {% for item in menu_items %}
+                    <li class="relative group">
+                        <a class="hover:text-primary transition duration-300 border-b-2 border-transparent hover:border-primary pb-1"
+                            href="{{ item.get_url }}">{{ item.title }}</a>
+                        {% if item.children.all %}
+                        <ul
+                            class="absolute left-0 top-full hidden group-hover:block bg-white shadow-xl rounded-lg p-2 min-w-[150px] border border-gray-100 z-50 normal-case font-medium">
+                            {% for child in item.children.all %}
+                            <li>
+                                <a href="{{ child.get_url }}"
+                                    class="block p-2 hover:text-primary hover:bg-gray-50 rounded transition text-gray-600">
+                                    {{ child.title }}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                    {% else %}
                     <li><a class="hover:text-primary transition duration-300 border-b-2 border-transparent hover:border-primary pb-1"
                             href="{% url 'blog:home' %}">Home</a></li>
                     <li><a class="hover:text-primary transition duration-300 border-b-2 border-transparent hover:border-primary pb-1"
                             href="{% url 'blog:category_list_all' %}">Categories</a></li>
-                    <li><a class="hover:text-primary transition duration-300 border-b-2 border-transparent hover:border-primary pb-1"
-                            href="{% url 'pages:about' %}">About</a></li>
+                    {% endif %}
                 </ul>
             </nav>
 
@@ -228,6 +249,15 @@
     <footer class="w-full glass mt-12 pb-6 pt-6">
         <div class="w-full container mx-auto flex flex-col items-center">
             <div class="flex flex-col md:flex-row text-center md:text-left md:justify-between py-6 gap-6">
+                {% get_menu 'footer-menu' as footer_items %}
+                {% if footer_items %}
+                {% for item in footer_items %}
+                <a href="{{ item.get_url }}"
+                    class="uppercase px-3 hover:text-primary transition duration-300 text-sm font-semibold">
+                    {{ item.title }}
+                </a>
+                {% endfor %}
+                {% else %}
                 <a href="{% url 'pages:about' %}"
                     class="uppercase px-3 hover:text-primary transition duration-300 text-sm font-semibold">About Us</a>
                 <a href="{% url 'pages:privacy_policy' %}"
@@ -239,6 +269,7 @@
                 <a href="{% url 'pages:contact' %}"
                     class="uppercase px-3 hover:text-primary transition duration-300 text-sm font-semibold">Contact
                     Us</a>
+                {% endif %}
             </div>
 
             <!-- Social Media Links -->

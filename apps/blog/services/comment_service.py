@@ -1,5 +1,5 @@
-from apps.blog.forms import CommentForm
-from apps.blog.models.comment import Comment
+from blog.forms import CommentForm
+from blog.models.comment import Comment
 
 class CommentService:
     @staticmethod

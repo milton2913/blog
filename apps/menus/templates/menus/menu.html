@@ -1,0 +1,28 @@
+<nav class="main-menu">
+    <ul class="flex items-center gap-6">
+        {% for item in items %}
+        <li class="relative group">
+            <a href="{{ item.get_url }}" class="hover:text-primary transition duration-300 font-semibold py-2">
+                {{ item.title }}
+                {% if item.children.exists %}
+                <i class="fas fa-chevron-down text-xs ml-1 opacity-50"></i>
+                {% endif %}
+            </a>
+
+            {% if item.children.exists %}
+            <ul
+                class="absolute left-0 top-full hidden group-hover:block bg-white shadow-xl rounded-xl p-4 w-48 border border-gray-100 mt-2 z-max">
+                {% for child in item.children.all %}
+                <li>
+                    <a href="{{ child.get_url }}"
+                        class="block py-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 px-2 rounded transition">
+                        {{ child.title }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</nav>

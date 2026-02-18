@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
-from apps.blog.models.post import Post
-from apps.blog.forms import CommentForm
-from apps.blog.services.post_service import PostService
-from apps.blog.services.comment_service import CommentService
+from blog.models.post import Post
+from blog.forms import CommentForm
+from blog.services.post_service import PostService
+from blog.services.comment_service import CommentService
 
 def home(request):
     posts_list = PostService.get_published_posts()

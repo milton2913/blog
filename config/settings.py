@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'accounts',
     'settings',
     'pages',
+    'menus',
+    'page_builder',
 ]
 
 MIDDLEWARE = [

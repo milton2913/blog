@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ page.meta_title|default:page.title }}{% endblock %}
+
+{% block meta_description %}{{ page.meta_description }}{% endblock %}
+
+{% block content %}
+<div class="page-builder-content w-full">
+    {% for block in blocks %}
+    <section class="block-{{ block.block_type }} mb-12">
+        {% if block.block_type == 'hero' %}
+        <div class="relative py-24 px-6 text-center glass rounded-3xl overflow-hidden mb-12 shadow-2xl">
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 text-gray-900 leading-tight">
+                {{ block.data.headline|default:page.title }}
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto mb-10 leading-relaxed">
+                {{ block.data.subheadline }}
+            </p>
+            {% if block.data.button_text %}
+            <a href="{{ block.data.button_url }}"
+                class="inline-block bg-primary hover:bg-blue-600 text-white font-bold py-4 px-10 rounded-2xl transition transform hover:scale-105 shadow-xl">
+                {{ block.data.button_text }}
+            </a>
+            {% endif %}
+        </div>
+
+        {% elif block.block_type == 'text' %}
+        <div class="glass-card p-8 md:p-16 rounded-3xl shadow-lg prose prose-lg max-w-none prose-blue">
+            {{ block.data.text|safe|linebreaks }}
+        </div>
+
+        {% elif block.block_type == 'image_text' %}
+        <div class="flex flex-col md:flex-row gap-12 items-center glass-card p-8 md:p-12 rounded-3xl shadow-lg">
+            {% if block.data.image_url %}
+            <div class="w-full md:w-1/2 rounded-2xl overflow-hidden shadow-md">
+                <img src="{{ block.data.image_url }}" alt="" class="w-full h-auto object-cover">
+            </div>
+            {% endif %}
+            <div class="w-full md:w-1/2">
+                <h2 class="text-3xl font-bold mb-4">{{ block.data.title }}</h2>
+                <div class="text-gray-600 leading-relaxed">
+                    {{ block.data.text|safe|linebreaks }}
+                </div>
+            </div>
+        </div>
+
+        {% elif block.block_type == 'html' %}
+        <div class="custom-html-block w-full">
+            {{ block.data.html|safe }}
+        </div>
+
+        {% elif block.block_type == 'cta' %}
+        <div
+            class="bg-primary/10 backdrop-blur-md p-12 md:p-16 rounded-3xl text-center border border-primary/20 shadow-lg">
+            <h2 class="text-3xl font-bold mb-4">{{ block.data.title }}</h2>
+            <p class="text-lg text-gray-600 mb-8">{{ block.data.text }}</p>
+            <a href="{{ block.data.button_url }}"
+                class="bg-primary text-white font-bold py-3 px-8 rounded-xl hover:bg-blue-600 transition">
+                {{ block.data.button_text }}
+            </a>
+        </div>
+
+        {% endif %}
+    </section>
+    {% empty %}
+    <div class="text-center py-20">
+        <h1 class="text-3xl font-bold text-gray-400">No blocks added to this page yet.</h1>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

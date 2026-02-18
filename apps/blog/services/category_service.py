@@ -1,6 +1,6 @@
 from django.db.models import Count
-from apps.blog.models.category import Category
-from apps.blog.models.tag import Tag
+from blog.models.category import Category
+from blog.models.tag import Tag
 
 class CategoryService:
     @staticmethod

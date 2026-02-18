@@ -1,6 +1,6 @@
 from django.db.models import Q
 from django.core.paginator import Paginator
-from apps.blog.models.post import Post
+from blog.models.post import Post
 
 class PostService:
     @staticmethod

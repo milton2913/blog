@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404
-from apps.blog.models.category import Category
-from apps.blog.models.tag import Tag
-from apps.blog.services.post_service import PostService
-from apps.blog.services.category_service import CategoryService
+from blog.models.category import Category
+from blog.models.tag import Tag
+from blog.services.post_service import PostService
+from blog.services.category_service import CategoryService
 
 def category_list(request, slug):
     category = get_object_or_404(Category, slug=slug)
