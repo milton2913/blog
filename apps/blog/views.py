@@ -36,7 +36,7 @@ def post_detail(request, slug):
             new_comment.save()
             if request.POST.get('ajax') == '1':
                 comments = post.comments.filter(active=True, parent__isnull=True)
-                return render(request, 'blog/comments.html', {'comments': comments})
+                return render(request, 'blog/comments.html', {'comments': comments, 'post': post})
 
             messages.success(request, 'Your comment has been submitted!')
             return redirect('blog:post_detail', slug=post.slug)

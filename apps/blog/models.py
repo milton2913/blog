@@ -100,6 +100,16 @@ class ThemeSettings(models.Model):
     linkedin_url = models.URLField(blank=True, help_text="LinkedIn profile URL")
     github_url = models.URLField(blank=True, help_text="GitHub profile URL")
 
+    # SMTP Settings (Dynamic Email Configuration)
+    email_active = models.BooleanField(default=False, help_text="Enable custom SMTP settings")
+    email_host = models.CharField(max_length=255, blank=True, help_text="SMTP Host (e.g., smtp.gmail.com)")
+    email_port = models.IntegerField(default=587, help_text="SMTP Port (e.g., 587)")
+    email_host_user = models.CharField(max_length=255, blank=True, help_text="SMTP Username")
+    email_host_password = models.CharField(max_length=255, blank=True, help_text="SMTP Password")
+    email_use_tls = models.BooleanField(default=True, help_text="Use TLS")
+    email_use_ssl = models.BooleanField(default=False, help_text="Use SSL")
+    email_from_email = models.EmailField(blank=True, help_text="Default 'From' email address")
+
     def __str__(self):
         return "Theme Settings"
 
@@ -125,7 +135,7 @@ class Comment(models.Model):
     parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='replies')
 
     class Meta:
-        ordering = ['created_at']
+        ordering = ['-created_at']
 
     def __str__(self):
         return 'Comment {} by {}'.format(self.body, self.name)

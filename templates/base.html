@@ -160,6 +160,23 @@
 
             <div class="flex items-center text-lg no-underline text-gray-800 gap-6">
 
+                <!-- Auth Links -->
+                <div class="flex items-center gap-4 text-sm font-bold uppercase">
+                    {% if user.is_authenticated %}
+                    <span class="hidden md:inline text-gray-500 normal-case">Hi, {{ user.username }}</span>
+                    <form method="post" action="{% url 'accounts:logout' %}" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="hover:text-primary transition duration-300">Logout</button>
+                    </form>
+                    {% else %}
+                    <a href="{% url 'accounts:login' %}" class="hover:text-primary transition duration-300">Login</a>
+                    <a href="{% url 'accounts:register' %}"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 shadow-md">Register</a>
+                    {% endif %}
+                </div>
+
+                <div class="h-6 w-px bg-gray-300 hidden md:block"></div>
+
 
 
                 {% if theme.facebook_url %}

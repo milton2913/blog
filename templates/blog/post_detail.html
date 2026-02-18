@@ -178,41 +178,7 @@
     {% endif %}
 
     <!-- Comments Section -->
-    <div class="w-full mt-8" x-data="{
-            async submitForm(e) {
-                const form = e.target;
-                const formData = new FormData(form);
-                formData.append('ajax', '1');
-                
-                try {
-                    const response = await fetch(form.action || window.location.href, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-CSRFToken': '{{ csrf_token }}'
-                        }
-                    });
-                    
-                    if (response.ok) {
-                        const html = await response.text();
-                        // Update comments list
-                        document.querySelector('.comments-list').innerHTML = html;
-                        // Reset form if it's the main one
-                        if (!form.querySelector('input[name=parent_id]')) {
-                             form.reset();
-                        } else {
-                            // Hide reply form
-                            form.closest('[id^=reply-form-]').classList.add('hidden');
-                        }
-                    } else {
-                        console.error('Submission failed');
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                }
-            }
-         }" x-on:submit.prevent="submitForm($event)">
-
+    <div class="w-full mt-8 comments-container">
         <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
             <i class="fas fa-comments text-primary"></i> Comments ({{ post.comments.count }})
         </h3>
@@ -220,7 +186,7 @@
         <!-- Main Comment Form -->
         <div class="glass-card w-full shadow-lg rounded-2xl p-8 mb-12">
             <h4 class="text-lg font-bold text-gray-800 mb-4">Leave a Comment</h4>
-            <form method="post">
+            <form method="post" class="comment-form">
                 {% csrf_token %}
 
                 <div class="grid grid-cols-1 gap-4">
@@ -237,7 +203,7 @@
                 </div>
 
                 <button type="submit"
-                    class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold transition shadow-lg transform hover:scale-105">
+                    class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold transition shadow-lg transform hover:scale-105 cursor-pointer">
                     Post Comment
                 </button>
             </form>
@@ -251,14 +217,89 @@
 </section>
 
 <script>
-    function toggleReplyForm(commentId) {
-        const form = document.getElementById(`reply-form-${commentId}`);
-        if (form.classList.contains('hidden')) {
-            form.classList.remove('hidden');
-        } else {
-            form.classList.add('hidden');
+    document.addEventListener('DOMContentLoaded', function () {
+        const commentsContainer = document.querySelector('.comments-container');
+
+        // Event Delegation for Form Submission
+        commentsContainer.addEventListener('submit', function (e) {
+            const form = e.target;
+
+            // Check if it's a comment form (main or reply)
+            if (form.tagName === 'FORM' && (form.classList.contains('comment-form') || form.closest('[id^=reply-form-]'))) {
+                e.preventDefault();
+                submitCommentForm(form);
+            }
+        });
+
+        // Event Delegation for Reply Button Toggle
+        commentsContainer.addEventListener('click', function (e) {
+            const toggleBtn = e.target.closest('button[onclick^="toggleReplyForm"]');
+            if (toggleBtn) {
+                // Prevent default inline onclick handler if we can, or just let strict handling work
+                // Since the inline handler exists, we might want to override or remove it in potential refactors.
+                // For now, let's just leave the inline handler in comments.html as is, or better, 
+                // we can rely on the inline handler since it just toggles a class.
+                // But wait, the previous code had a specific `toggleReplyForm` function. 
+                // I need to ensure that function exists or replace it.
+            }
+        });
+    });
+
+    async function submitCommentForm(form) {
+        const formData = new FormData(form);
+        formData.append('ajax', '1');
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerText;
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'Posting...';
+
+        try {
+            const response = await fetch(form.action || window.location.href, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            });
+
+            if (response.ok) {
+                const html = await response.text();
+                // Update comments list
+                document.querySelector('.comments-list').innerHTML = html;
+
+                // Reset form
+                form.reset();
+
+                // If it was a reply form, hide it
+                // We find the parent container of the reply form
+                const replyContainer = form.closest('[id^=reply-form-]');
+                if (replyContainer) {
+                    replyContainer.classList.add('hidden');
+                }
+
+                // Optional: Scroll to top of active comments or show success message?
+
+            } else {
+                console.error('Submission failed');
+                alert('There was an error posting your comment. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Network error. Please try again.');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerText = originalBtnText;
         }
     }
+
+    // Keep the global toggle function for the inline onclicks in comments.html
+    window.toggleReplyForm = function (commentId) {
+        const form = document.getElementById(`reply-form-${commentId}`);
+        if (form) {
+            form.classList.toggle('hidden');
+        }
+    };
 </script>
 
 {% show_sidebar %}
