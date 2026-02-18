@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Category, Tag, Post, Comment
 
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'is_active', 'created_at', 'icon')
@@ -17,12 +18,14 @@ class CategoryAdmin(admin.ModelAdmin):
         }),
     )
 
+
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'is_active')
     search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
     list_filter = ('is_active',)
+
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
@@ -44,37 +47,6 @@ class PostAdmin(admin.ModelAdmin):
         }),
     )
 
-from .models import ThemeSettings
-
-@admin.register(ThemeSettings)
-class ThemeSettingsAdmin(admin.ModelAdmin):
-    list_display = ('site_name', 'primary_color', 'glass_opacity')
-    change_form_template = 'admin/blog/themesettings/change_form.html'
-    
-    fieldsets = (
-        ('General Settings', {
-            'fields': ('site_name', 'primary_color', 'background_color', 'text_color', 'link_color')
-        }),
-        ('Glassmorphism', {
-            'fields': ('glass_opacity', 'glass_blur', 'border_radius')
-        }),
-        ('SEO Settings', {
-            'fields': ('site_description', 'site_keywords', 'twitter_handle', 'facebook_app_id'),
-        }),
-        ('Social Media Links', {
-            'fields': ('facebook_url', 'twitter_url', 'instagram_url', 'linkedin_url', 'github_url'),
-        }),
-        ('SMTP Settings', {
-            'fields': ('email_active', 'email_host', 'email_port', 'email_host_user', 'email_host_password', 'email_use_tls', 'email_use_ssl', 'email_from_email'),
-            'description': 'Configure your email provider settings here. (e.g., Gmail, Outlook, etc.)'
-        }),
-    )
-    
-    def has_add_permission(self, request):
-        # Only allow one instance
-        if self.model.objects.exists():
-            return False
-        return super().has_add_permission(request)
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
@@ -85,4 +57,3 @@ class CommentAdmin(admin.ModelAdmin):
 
     def approve_comments(self, request, queryset):
         queryset.update(active=True)
-

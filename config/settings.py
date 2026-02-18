@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django_browser_reload',
     'blog',
     'accounts',
+    'settings',
 ]
 
 MIDDLEWARE = [
@@ -69,7 +70,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'blog.context_processors.theme_settings',
+                'settings.context_processors.theme_settings',
             ],
         },
     },
@@ -148,4 +149,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.User'
 
-EMAIL_BACKEND = 'blog.backends.DynamicSMTPEmailBackend'
+EMAIL_BACKEND = 'settings.backends.DynamicSMTPEmailBackend'
