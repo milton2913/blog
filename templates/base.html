@@ -59,7 +59,7 @@
             --primary: #2B7DDD;
             --bg-color: #F3F4F6;
             --text-color: #1F2937;
-            --link-color: #2563EB;
+            --link-color: #5c86e0;
             --glass-opacity: 0.70;
             --glass-blur: 10px;
             --border-radius: 1rem;
@@ -149,7 +149,7 @@
                     <li><a class="hover:text-primary transition duration-300 border-b-2 border-transparent hover:border-primary pb-1"
                             href="{% url 'blog:category_list_all' %}">Categories</a></li>
                     <li><a class="hover:text-primary transition duration-300 border-b-2 border-transparent hover:border-primary pb-1"
-                            href="{% url 'blog:about' %}">About</a></li>
+                            href="{% url 'pages:about' %}">About</a></li>
                 </ul>
             </nav>
 
@@ -228,15 +228,15 @@
     <footer class="w-full glass mt-12 pb-6 pt-6">
         <div class="w-full container mx-auto flex flex-col items-center">
             <div class="flex flex-col md:flex-row text-center md:text-left md:justify-between py-6 gap-6">
-                <a href="{% url 'blog:about' %}"
+                <a href="{% url 'pages:about' %}"
                     class="uppercase px-3 hover:text-primary transition duration-300 text-sm font-semibold">About Us</a>
-                <a href="{% url 'blog:privacy_policy' %}"
+                <a href="{% url 'pages:privacy_policy' %}"
                     class="uppercase px-3 hover:text-primary transition duration-300 text-sm font-semibold">Privacy
                     Policy</a>
-                <a href="{% url 'blog:terms_conditions' %}"
+                <a href="{% url 'pages:terms_conditions' %}"
                     class="uppercase px-3 hover:text-primary transition duration-300 text-sm font-semibold">Terms &
                     Conditions</a>
-                <a href="{% url 'blog:contact' %}"
+                <a href="{% url 'pages:contact' %}"
                     class="uppercase px-3 hover:text-primary transition duration-300 text-sm font-semibold">Contact
                     Us</a>
             </div>

@@ -18,7 +18,7 @@ class ContactForm(forms.Form):
         'placeholder': 'Your Message'
     }))
 
-from .models import Comment
+from apps.blog.models.comment import Comment
 
 class CommentForm(forms.ModelForm):
     class Meta:

@@ -45,7 +45,7 @@
             {% endfor %}
             {% endif %}
 
-            <form method="POST" action="{% url 'blog:contact' %}" class="space-y-4">
+            <form method="POST" action="{% url 'pages:contact' %}" class="space-y-4">
                 {% csrf_token %}
 
                 <div>

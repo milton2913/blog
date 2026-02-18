@@ -17,7 +17,7 @@ def send_activation_email(user, request):
     )
 
     subject = 'Activate your account'
-    html_message = render_to_string('registration/activation_email.html', {
+    html_message = render_to_string('accounts/activation_email.html', {
         'user': user,
         'activation_link': activation_link,
         'site_name': getattr(settings, 'SITE_NAME', 'Django Blog') 

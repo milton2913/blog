@@ -31,7 +31,7 @@ def register(request):
             return redirect('accounts:login')
     else:
         form = UserRegistrationForm()
-    return render(request, 'registration/register.html', {'form': form})
+    return render(request, 'accounts/register.html', {'form': form})
 
 def activate(request, uidb64, token):
     try:
@@ -48,17 +48,17 @@ def activate(request, uidb64, token):
         messages.success(request, 'Your account has been activated successfully!')
         return redirect('blog:home')
     else:
-        return render(request, 'registration/activation_invalid.html')
+        return render(request, 'accounts/activation_invalid.html')
 
 class CustomLoginView(LoginView):
     authentication_form = UserLoginForm
-    template_name = 'registration/login.html'
+    template_name = 'accounts/login.html'
     redirect_authenticated_user = True
     
     def get_success_url(self):
         return reverse_lazy('blog:home')
 
 class CustomPasswordResetView(PasswordResetView):
-    template_name = 'registration/password_reset_form.html'
-    email_template_name = 'registration/password_reset_email.html'
+    template_name = 'accounts/password_reset_form.html'
+    email_template_name = 'accounts/password_reset_email.html'
     success_url = reverse_lazy('accounts:password_reset_done')

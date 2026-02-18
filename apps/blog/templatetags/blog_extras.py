@@ -1,14 +1,14 @@
 from django import template
-from django.db.models import Count
-from blog.models import Category, Tag, Post
+from apps.blog.services.category_service import CategoryService, TagService
+from apps.blog.services.post_service import PostService
 
 register = template.Library()
 
 @register.inclusion_tag('blog/sidebar.html')
 def show_sidebar():
-    categories = Category.objects.filter(is_active=True).annotate(post_count=Count('posts', distinct=True)).exclude(post_count=0)
-    popular_tags = Tag.objects.filter(is_active=True).annotate(post_count=Count('posts', distinct=True)).order_by('-post_count')[:10]
-    recent_posts = Post.objects.filter(status='published').order_by('-published_at')[:5]
+    categories = CategoryService.get_active_categories().exclude(post_count=0)
+    popular_tags = TagService.get_active_tags()[:10]  # TagService needs post count logic if wanted, for now just active
+    recent_posts = PostService.get_published_posts()[:5]
     return {
         'categories': categories,
         'popular_tags': popular_tags,
